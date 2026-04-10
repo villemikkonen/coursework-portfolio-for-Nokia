@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>Case 4 ML models.ipynb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+.ls0 { height: 1px; border-width: 0; color: #43454a; background-color:#43454a}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Case 4 ML models.ipynb</font>
+</center></td></tr></table>
+<pre><span class="s0">#%% 
+</span><span class="s1">from </span><span class="s0">itertools </span><span class="s1">import </span><span class="s0">count</span>
+
+<span class="s1">import </span><span class="s0">pandas </span><span class="s1">as </span><span class="s0">pd</span>
+<span class="s1">import </span><span class="s0">numpy </span><span class="s1">as </span><span class="s0">np</span>
+<span class="s1">import </span><span class="s0">sklearn </span><span class="s1">as </span><span class="s0">skl</span>
+
+<span class="s0">data </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">read_csv</span><span class="s2">(</span><span class="s3">'friction_place_data_2024.csv'</span><span class="s2">)</span>
+<span class="s0">data</span><span class="s2">.</span><span class="s0">head</span><span class="s2">()</span><hr class="ls0"><span class="s0">#%% 
+tf_counts </span><span class="s2">= </span><span class="s0">data</span><span class="s2">[</span><span class="s3">'Test.Result'</span><span class="s2">].</span><span class="s0">value_counts</span><span class="s2">().</span><span class="s0">to_numpy</span><span class="s2">()</span>
+<span class="s0">round</span><span class="s2">((</span><span class="s0">tf_counts</span><span class="s2">[</span><span class="s4">0</span><span class="s2">] / (</span><span class="s0">tf_counts</span><span class="s2">[</span><span class="s4">0</span><span class="s2">] + </span><span class="s0">tf_counts</span><span class="s2">[</span><span class="s4">1</span><span class="s2">]) * </span><span class="s4">100</span><span class="s2">), </span><span class="s4">1</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+data</span><span class="s2">[</span><span class="s3">'Test.Result'</span><span class="s2">].</span><span class="s0">value_counts</span><span class="s2">()</span><hr class="ls0"><span class="s0">#%% 
+true_data </span><span class="s2">= </span><span class="s0">data</span><span class="s2">[</span><span class="s0">data</span><span class="s2">[</span><span class="s3">'Test.Result'</span><span class="s2">] == </span><span class="s1">True</span><span class="s2">]</span>
+<span class="s0">true_data</span><hr class="ls0"><span class="s0">#%% 
+round</span><span class="s2">(</span><span class="s0">true_data</span><span class="s2">[</span><span class="s3">'mat.2'</span><span class="s2">].</span><span class="s0">mean</span><span class="s2">(</span><span class="s0">axis</span><span class="s2">=</span><span class="s4">0</span><span class="s2">), </span><span class="s4">1</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s1">import </span><span class="s0">numpy </span><span class="s1">as </span><span class="s0">np</span>
+<span class="s1">import </span><span class="s0">pandas </span><span class="s1">as </span><span class="s0">pd</span>
+<span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">model_selection </span><span class="s1">import </span><span class="s0">train_test_split</span>
+<span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">linear_model </span><span class="s1">import </span><span class="s0">LogisticRegression</span>
+<span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">tree </span><span class="s1">import </span><span class="s0">DecisionTreeClassifier</span>
+<span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">ensemble </span><span class="s1">import </span><span class="s0">RandomForestClassifier</span><span class="s2">, </span><span class="s0">GradientBoostingClassifier</span>
+<span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">svm </span><span class="s1">import </span><span class="s0">SVC</span>
+<span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">neural_network </span><span class="s1">import </span><span class="s0">MLPClassifier</span><hr class="ls0"><span class="s0">#%% 
+data </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">read_csv</span><span class="s2">(</span><span class="s3">'friction_place_data_2024.csv'</span><span class="s2">)</span>
+
+<span class="s0">train </span><span class="s2">, </span><span class="s0">test </span><span class="s2">= </span><span class="s0">train_test_split</span><span class="s2">(</span><span class="s0">data</span><span class="s2">, </span><span class="s0">test_size </span><span class="s2">= </span><span class="s4">0.3</span><span class="s2">, </span><span class="s0">random_state </span><span class="s2">= </span><span class="s4">123</span><span class="s2">)</span>
+
+<span class="s0">print</span><span class="s2">(</span><span class="s0">train</span><span class="s2">.</span><span class="s0">head</span><span class="s2">())</span>
+<span class="s0">print</span><span class="s2">(</span><span class="s0">test</span><span class="s2">.</span><span class="s0">head</span><span class="s2">())</span>
+<hr class="ls0"><span class="s0">#%% 
+y_train </span><span class="s2">= </span><span class="s0">train</span><span class="s2">[</span><span class="s3">'Test.Result'</span><span class="s2">]</span>
+<span class="s0">X_train </span><span class="s2">= </span><span class="s0">train</span><span class="s2">.</span><span class="s0">drop</span><span class="s2">(</span><span class="s3">'Test.Result'</span><span class="s2">, </span><span class="s0">axis </span><span class="s2">= </span><span class="s4">1</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+y_test </span><span class="s2">= </span><span class="s0">test</span><span class="s2">[</span><span class="s3">'Test.Result'</span><span class="s2">]</span>
+<span class="s0">X_test </span><span class="s2">= </span><span class="s0">test</span><span class="s2">.</span><span class="s0">drop</span><span class="s2">(</span><span class="s3">'Test.Result'</span><span class="s2">, </span><span class="s0">axis </span><span class="s2">= </span><span class="s4">1</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% md 
+Lets create the training models <hr class="ls0">#%% 
+</span><span class="s5">#Logistic regression</span>
+<span class="s0">lr_model </span><span class="s2">= </span><span class="s0">LogisticRegression</span><span class="s2">(</span><span class="s0">max_iter </span><span class="s2">= </span><span class="s4">1000</span><span class="s2">, </span><span class="s0">random_state</span><span class="s2">=</span><span class="s4">123</span><span class="s2">)</span>
+<span class="s0">lr_model</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s5">#Decision Tree</span>
+<span class="s0">dtree </span><span class="s2">= </span><span class="s0">DecisionTreeClassifier</span><span class="s2">(</span><span class="s0">min_samples_leaf</span><span class="s2">=</span><span class="s4">10</span><span class="s2">, </span><span class="s0">random_state</span><span class="s2">=</span><span class="s4">123</span><span class="s2">)</span>
+<span class="s0">dtree</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s5">#Random Forest</span>
+<span class="s0">rf </span><span class="s2">= </span><span class="s0">RandomForestClassifier</span><span class="s2">(</span><span class="s0">n_estimators</span><span class="s2">=</span><span class="s4">1000</span><span class="s2">, </span><span class="s0">random_state</span><span class="s2">=</span><span class="s4">123</span><span class="s2">)</span>
+<span class="s0">rf</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s5">#Support Vector Machine</span>
+<span class="s0">svm_model </span><span class="s2">= </span><span class="s0">SVC</span><span class="s2">( </span><span class="s0">probability</span><span class="s2">=</span><span class="s1">True</span><span class="s2">, </span><span class="s0">C</span><span class="s2">=</span><span class="s4">10</span><span class="s2">, </span><span class="s0">degree</span><span class="s2">=</span><span class="s4">5</span><span class="s2">, </span><span class="s0">gamma</span><span class="s2">=</span><span class="s3">'auto'</span><span class="s2">, </span><span class="s0">kernel</span><span class="s2">=</span><span class="s3">'rbf'</span><span class="s2">, </span><span class="s0">random_state</span><span class="s2">=</span><span class="s4">123</span><span class="s2">)</span>
+<span class="s0">svm_model</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s5"># Neural Network Classifier</span>
+<span class="s0">nnc </span><span class="s2">= </span><span class="s0">MLPClassifier</span><span class="s2">(</span><span class="s0">max_iter</span><span class="s2">=</span><span class="s4">20000</span><span class="s2">, </span><span class="s0">learning_rate</span><span class="s2">=</span><span class="s3">'adaptive'</span><span class="s2">, </span><span class="s0">hidden_layer_sizes</span><span class="s2">=(</span><span class="s4">10</span><span class="s2">, </span><span class="s4">5</span><span class="s2">), </span><span class="s0">learning_rate_init</span><span class="s2">=</span><span class="s4">0.01</span><span class="s2">,</span><span class="s0">random_state</span><span class="s2">=</span><span class="s4">123</span><span class="s2">)</span>
+<span class="s0">nnc</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s5"># Gradient Boosting Machine</span>
+<span class="s0">gbm </span><span class="s2">= </span><span class="s0">GradientBoostingClassifier</span><span class="s2">(</span><span class="s0">n_estimators</span><span class="s2">=</span><span class="s4">1000</span><span class="s2">, </span><span class="s0">learning_rate</span><span class="s2">=</span><span class="s4">0.1</span><span class="s2">, </span><span class="s0">max_depth</span><span class="s2">=</span><span class="s4">5</span><span class="s2">, </span><span class="s0">min_samples_leaf</span><span class="s2">=</span><span class="s4">5</span><span class="s2">, </span><span class="s0">random_state</span><span class="s2">=</span><span class="s4">123</span><span class="s2">)</span>
+<span class="s0">gbm</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">)</span><hr class="ls0"><span class="s0">#%% md 
+Lets compare the accuracy scores with test data <hr class="ls0">#%% 
+</span><span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">metrics </span><span class="s1">import </span><span class="s0">accuracy_score</span>
+<span class="s0">model_list </span><span class="s2">= [</span>
+    <span class="s2">(</span><span class="s3">&quot;Logistic Regression&quot;</span><span class="s2">, </span><span class="s0">lr_model</span><span class="s2">),</span>
+    <span class="s2">(</span><span class="s3">&quot;Decision Tree&quot;</span><span class="s2">, </span><span class="s0">dtree</span><span class="s2">),</span>
+    <span class="s2">(</span><span class="s3">&quot;Random Forest&quot;</span><span class="s2">, </span><span class="s0">rf</span><span class="s2">),</span>
+    <span class="s2">(</span><span class="s3">&quot;Support Vector Machine&quot;</span><span class="s2">, </span><span class="s0">svm_model</span><span class="s2">),</span>
+    <span class="s2">(</span><span class="s3">&quot;Neural Network&quot;</span><span class="s2">, </span><span class="s0">nnc</span><span class="s2">),</span>
+    <span class="s2">(</span><span class="s3">&quot;Gradient Boosting&quot;</span><span class="s2">, </span><span class="s0">gbm</span><span class="s2">)</span>
+<span class="s2">]</span>
+
+<span class="s0">performance_data </span><span class="s2">= []</span>
+
+<span class="s1">for </span><span class="s0">name</span><span class="s2">, </span><span class="s0">model </span><span class="s1">in </span><span class="s0">model_list</span><span class="s2">:</span>
+    <span class="s0">predictions </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">predict</span><span class="s2">(</span><span class="s0">X_test</span><span class="s2">)</span>
+    <span class="s0">accuracy </span><span class="s2">= </span><span class="s0">accuracy_score</span><span class="s2">(</span><span class="s0">y_test</span><span class="s2">, </span><span class="s0">predictions</span><span class="s2">)</span>
+    <span class="s0">performance_data</span><span class="s2">.</span><span class="s0">append</span><span class="s2">({</span><span class="s3">&quot;Model&quot;</span><span class="s2">: </span><span class="s0">name</span><span class="s2">, </span><span class="s3">&quot;Accuracy&quot;</span><span class="s2">: </span><span class="s0">accuracy</span><span class="s2">})</span>
+
+<span class="s0">results_df </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">DataFrame</span><span class="s2">(</span><span class="s0">performance_data</span><span class="s2">).</span><span class="s0">sort_values</span><span class="s2">(</span><span class="s0">by</span><span class="s2">=</span><span class="s3">&quot;Accuracy&quot;</span><span class="s2">, </span><span class="s0">ascending</span><span class="s2">=</span><span class="s1">False</span><span class="s2">)</span>
+
+<span class="s0">print</span><span class="s2">(</span><span class="s0">results_df</span><span class="s2">.</span><span class="s0">to_string</span><span class="s2">(</span><span class="s0">index</span><span class="s2">=</span><span class="s1">False</span><span class="s2">))</span><hr class="ls0"><span class="s0">#%% 
+</span><span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">metrics </span><span class="s1">import </span><span class="s0">confusion_matrix</span>
+
+<span class="s0">specificity_data </span><span class="s2">= []</span>
+
+<span class="s1">for </span><span class="s0">name</span><span class="s2">, </span><span class="s0">model </span><span class="s1">in </span><span class="s0">model_list</span><span class="s2">:</span>
+    <span class="s0">y_pred </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">predict</span><span class="s2">(</span><span class="s0">X_test</span><span class="s2">)</span>
+
+    <span class="s0">tn</span><span class="s2">, </span><span class="s0">fp</span><span class="s2">, </span><span class="s0">fn</span><span class="s2">, </span><span class="s0">tp </span><span class="s2">= </span><span class="s0">confusion_matrix</span><span class="s2">(</span><span class="s0">y_test</span><span class="s2">, </span><span class="s0">y_pred</span><span class="s2">).</span><span class="s0">ravel</span><span class="s2">()</span>
+
+
+    <span class="s0">specificity </span><span class="s2">= </span><span class="s0">tn </span><span class="s2">/ (</span><span class="s0">tn </span><span class="s2">+ </span><span class="s0">fp</span><span class="s2">)</span>
+
+    <span class="s0">specificity_data</span><span class="s2">.</span><span class="s0">append</span><span class="s2">({</span><span class="s3">&quot;Model&quot;</span><span class="s2">: </span><span class="s0">name</span><span class="s2">, </span><span class="s3">&quot;Specificity&quot;</span><span class="s2">: </span><span class="s0">specificity</span><span class="s2">})</span>
+
+<span class="s0">specificity_df </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">DataFrame</span><span class="s2">(</span><span class="s0">specificity_data</span><span class="s2">).</span><span class="s0">sort_values</span><span class="s2">(</span><span class="s0">by</span><span class="s2">=</span><span class="s3">&quot;Specificity&quot;</span><span class="s2">, </span><span class="s0">ascending</span><span class="s2">=</span><span class="s1">True</span><span class="s2">)</span>
+
+<span class="s0">print</span><span class="s2">(</span><span class="s0">specificity_df</span><span class="s2">.</span><span class="s0">to_string</span><span class="s2">(</span><span class="s0">index</span><span class="s2">=</span><span class="s1">False</span><span class="s2">))</span><hr class="ls0"><span class="s0">#%% 
+dtree</span><span class="s2">.</span><span class="s0">get_n_leaves</span><span class="s2">()</span><hr class="ls0"><span class="s0">#%% md 
+AUC calculations <hr class="ls0">#%% 
+</span><span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">metrics </span><span class="s1">import </span><span class="s0">roc_curve</span><span class="s2">, </span><span class="s0">auc</span><span class="s2">, </span><span class="s0">roc_auc_score</span>
+
+<span class="s0">auc_data </span><span class="s2">= []</span>
+
+<span class="s1">for </span><span class="s0">name</span><span class="s2">, </span><span class="s0">model </span><span class="s1">in </span><span class="s0">model_list</span><span class="s2">:</span>
+    <span class="s1">if </span><span class="s0">hasattr</span><span class="s2">(</span><span class="s0">model</span><span class="s2">, </span><span class="s3">&quot;predict_proba&quot;</span><span class="s2">):</span>
+        <span class="s0">probs </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">predict_proba</span><span class="s2">(</span><span class="s0">X_test</span><span class="s2">)[:, </span><span class="s4">1</span><span class="s2">]</span>
+    <span class="s1">else</span><span class="s2">:</span>
+        <span class="s0">probs </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">decision_function</span><span class="s2">(</span><span class="s0">X_test</span><span class="s2">)</span>
+
+    <span class="s0">auc_val </span><span class="s2">= </span><span class="s0">roc_auc_score</span><span class="s2">(</span><span class="s0">y_test</span><span class="s2">, </span><span class="s0">probs</span><span class="s2">)</span>
+    <span class="s0">auc_data</span><span class="s2">.</span><span class="s0">append</span><span class="s2">({</span><span class="s3">&quot;Model&quot;</span><span class="s2">: </span><span class="s0">name</span><span class="s2">, </span><span class="s3">&quot;AUC&quot;</span><span class="s2">: </span><span class="s0">auc_val</span><span class="s2">})</span>
+
+
+<span class="s0">auc_df </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">DataFrame</span><span class="s2">(</span><span class="s0">auc_data</span><span class="s2">).</span><span class="s0">sort_values</span><span class="s2">(</span><span class="s0">by</span><span class="s2">=</span><span class="s3">&quot;AUC&quot;</span><span class="s2">, </span><span class="s0">ascending</span><span class="s2">=</span><span class="s1">False</span><span class="s2">)</span>
+<span class="s0">print</span><span class="s2">(</span><span class="s0">auc_df</span><span class="s2">.</span><span class="s0">to_string</span><span class="s2">(</span><span class="s0">index</span><span class="s2">=</span><span class="s1">False</span><span class="s2">))</span><hr class="ls0"><span class="s0">#%% md 
+Random forest importance <hr class="ls0">#%% 
+importances </span><span class="s2">= </span><span class="s0">rf</span><span class="s2">.</span><span class="s0">feature_importances_</span>
+<span class="s0">feature_names </span><span class="s2">= </span><span class="s0">X_train</span><span class="s2">.</span><span class="s0">columns</span>
+
+<span class="s0">df_imp </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">DataFrame</span><span class="s2">({</span><span class="s3">'Variable'</span><span class="s2">: </span><span class="s0">feature_names</span><span class="s2">, </span><span class="s3">'Importance'</span><span class="s2">: </span><span class="s0">importances</span><span class="s2">})</span>
+<span class="s0">df_imp </span><span class="s2">= </span><span class="s0">df_imp</span><span class="s2">.</span><span class="s0">sort_values</span><span class="s2">(</span><span class="s0">by</span><span class="s2">=</span><span class="s3">'Importance'</span><span class="s2">, </span><span class="s0">ascending</span><span class="s2">=</span><span class="s1">False</span><span class="s2">)</span>
+
+<span class="s0">print</span><span class="s2">(</span><span class="s0">df_imp</span><span class="s2">.</span><span class="s0">head</span><span class="s2">(</span><span class="s4">1</span><span class="s2">).</span><span class="s0">to_string</span><span class="s2">(</span><span class="s0">index</span><span class="s2">=</span><span class="s1">False</span><span class="s2">))</span><hr class="ls0"><span class="s0">#%% 
+</span></pre>
+</body>
+</html>
