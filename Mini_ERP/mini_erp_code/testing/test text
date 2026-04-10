@@ -1,0 +1,18 @@
+#This file is for storing and easy access of test info strings
+
+###################
+# Customer
+# Customer('00001', 'Ville', 'Espoo', 'tie 1', '313', 'mail@email.com')
+
+###################
+# System user
+
+#  user_a = SystemUser('00001', 'Valtteri', 'A-mies')
+
+
+###################
+# Item
+
+# item_i = Item('00001', 'bar', '100', 10)
+
+# first_item = Item('00001', 'bar', '100', 10)

@@ -1,0 +1,3 @@
+customer_id,name,city,address,phone,email
+00001,Ville,Espoo,Tie 1,313,mail@email.com
+00002,Verneri,Vihti,Vihdintie 5,3456,nomail@email.com
